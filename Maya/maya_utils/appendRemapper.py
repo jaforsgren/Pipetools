@@ -1,6 +1,6 @@
 import maya.cmds as cmds
 
-coloroutput = cmds.ls(sl=True)[0]+'.outColor'
+sel = cmds.ls(sl=True)[0]
 upstreaminput = cmds.listConnections(cmds.ls(sl=True),d=True, s=False,p=True)[-1]
 
 def createNetwork(coloroutput,upstreaminput):
@@ -13,11 +13,13 @@ def createNetwork(coloroutput,upstreaminput):
 	# createNetwork(node)
 	# Make connections	
 
+
 	for i in ['.value','.color','input']:
-		try:
-			cmds.connectAttr( coloroutput, node+i, f=True)
-		except:
-			pass	
+		for y in ['.outColor','outValue','output']: # ugly! there must be some way of returning the selected nodes outputted attributes?
+			try:
+				cmds.connectAttr( coloroutput+y, node+i, f=True)
+			except:
+				pass	
 	
 	for i in ['.outColor','outValue','output']:
 		try:
@@ -25,7 +27,7 @@ def createNetwork(coloroutput,upstreaminput):
 		except:
 			pass			
 
-createNetwork(coloroutput,upstreaminput)
+createNetwork(sel,upstreaminput)
 
 
 
