@@ -25,27 +25,33 @@ cameras = { "Red Epic/2k":[11.059, 5.832],
 			"Canon DSLR/Rebel video":[22.3, 12.54],
 			}
 			
-#print cameras["Phantom/Flex 1080p"][0],
-# >>> 18.55
-
-def mmtoInches(x,y):
-	# in reality 
-	inchesX = x*03
-	inchesY = y*03
-	return inchesX,inchesY
 
 
-def setAperture(camera,x,y):
-	x,y = mmtoIinches(x,y)
+def matchCameras():
+
+	srcCam = cmds.ls(sl=True)[0]
+	trgtCam = cmds.ls(sl=True)[1]
+
+	attributes = cmds.listAttr(srcCam, write=True, hasData=True )
+	for attribute in attributes:
+		try:
+			cmds.setAttr(trgtCam+'.'+attribut, cmds.getAttr(srcCam+'.'+attribut,) write=True)
+		except:
+			print "failed to match",attribute
+
+matchCameras()			
+
+def setAperture(camera,x,y,fl=None):
+	# millimeters to inches
+	x = x/25.4
+	y = y/25.4
+	print x,y
+	# set attributes
 	cmds.setAttr(camera+".horizontalFilmAperture",x)
 	cmds.setAttr(camera+".verticalFilmAperture",y)
-
-
-
-
-def matchCameras()
 	
-			
+	if fl is not None:
+		cmds.setAttr(camera+".focalLength",fl)
+	
+# setAperture(cmds.ls(sl=True)[0],33,33)
 
-
-#setaperture(cmds.ls(sl=True)[0],33,33)
